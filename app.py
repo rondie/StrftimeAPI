@@ -5,6 +5,37 @@ from flask import Flask
 
 app = Flask(__name__)
 
+# Set of valid strftime format codes
+VALID_FORMAT_CODES = {
+    "a",
+    "A",
+    "w",
+    "d",
+    "b",
+    "B",
+    "m",
+    "y",
+    "Y",
+    "H",
+    "I",
+    "p",
+    "M",
+    "S",
+    "f",
+    "z",
+    "Z",
+    "j",
+    "U",
+    "W",
+    "c",
+    "x",
+    "X",
+    "%",
+    "G",
+    "u",
+    "V",
+}
+
 
 @app.route("/")
 def home():
@@ -53,12 +84,11 @@ def get_time(format_string):
         if ";" in format_string or "`" in format_string or "&" in format_string:
             return "Error: Format string contains invalid characters", 400
 
-        # Test for valid format string
-        try:
-            # Try a sample formatting to see if the format string is valid
-            datetime.datetime.now().strftime(format_string)
-        except ValueError:
-            return f"Error: Invalid format string", 400
+        # Validate format codes
+        format_codes = re.findall(r"%([a-zA-Z])", format_string)
+        for code in format_codes:
+            if code not in VALID_FORMAT_CODES:
+                return f"Error: Invalid format code '%{code}'", 400
 
         # Format the current time according to the provided strftime format
         current_time = datetime.datetime.now().strftime(format_string)

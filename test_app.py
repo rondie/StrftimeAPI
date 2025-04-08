@@ -50,7 +50,7 @@ def test_invalid_format_string(client):
     # %K is not a valid format directive in strftime
     response = client.get("/%K")
     assert response.status_code == 400
-    assert b"Error" in response.data
+    assert b"Error: Invalid format code" in response.data
 
 
 def test_security_check(client):
