@@ -46,13 +46,13 @@ def get_time(format_string):
         format_string = format_string.replace("%25", "%")
 
         # Enhanced security check to prevent command injection and invalid formats
-        if re.search(r'[^a-zA-Z0-9\s%\-_.:;,/\\() ]', format_string):
+        if re.search(r"[^a-zA-Z0-9\s%\-_.:;,/\\() ]", format_string):
             return "Error: Format string contains invalid characters", 400
-        
+
         # Check for potential command injection patterns
         if ";" in format_string or "`" in format_string or "&" in format_string:
             return "Error: Format string contains invalid characters", 400
-        
+
         # Test for valid format string
         try:
             # Try a sample formatting to see if the format string is valid

@@ -61,7 +61,7 @@ def test_security_check(client):
         "/%Y`ls -la`",
         "/%Y|echo 'hacked'",
     ]
-    
+
     for case in security_test_cases:
         response = client.get(case)
         assert response.status_code == 400
