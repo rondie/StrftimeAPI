@@ -8,6 +8,11 @@ on:
   release:
     types: [ published ]
 
+# Add this permissions block
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   lint:
     name: Lint Python Code
