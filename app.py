@@ -68,3 +68,34 @@ def home():
         </body>
     </html>
     """
+
+
+@app.route("/<path:format_string>")
+def get_time(format_string):
+    try:
+        # Replace URL encoded characters if present
+        format_string = format_string.replace("%25", "%")
+
+        # Enhanced security check to prevent command injection and invalid formats
+        if re.search(r"[^a-zA-Z0-9\s%\-_.:;,/\\() ]", format_string):
+            return "Error: Format string contains invalid characters", 400
+
+        # Check for potential command injection patterns
+        if ";" in format_string or "`" in format_string or "&" in format_string:
+            return "Error: Format string contains invalid characters", 400
+
+        # Validate format codes
+        format_codes = re.findall(r"%([a-zA-Z])", format_string)
+        for code in format_codes:
+            if code not in VALID_FORMAT_CODES:
+                return f"Error: Invalid format code '%{code}'", 400
+
+        # Format the current time according to the provided strftime format
+        current_time = datetime.datetime.now().strftime(format_string)
+        return current_time
+    except Exception as e:
+        return f"Error: {str(e)}", 400
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)

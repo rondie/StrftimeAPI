@@ -19,7 +19,7 @@ def test_home_page(client):
     """Test that the home page loads correctly."""
     response = client.get("/")
     assert response.status_code == 200
-    assert b"Welcome to the Time Server" in response.data
+    assert b"Welcome to StrftimeAPI" in response.data
 
 
 def test_time_format(client):
