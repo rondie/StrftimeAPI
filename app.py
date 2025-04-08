@@ -45,7 +45,7 @@ def get_time(format_string):
         format_string = format_string.replace("%25", "%")
 
         # Basic security check to prevent command injection
-        if re.search(r'[^a-zA-Z0-9\s%\-_.:;,/\\()]', format_string):
+        if re.search(r"[^a-zA-Z0-9\s%\-_.:;,/\\()]", format_string):
             return "Error: Format string contains invalid characters", 400
 
         # Format the current time according to the provided strftime format
