@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  strftimeapi:
+    image: ghcr.io/rondie/strftimeapi:latest
+    container_name: strftimeapi
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    environment:
+      - PYTHONUNBUFFERED=1
