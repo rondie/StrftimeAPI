@@ -47,7 +47,9 @@ def test_time_format(client):
 
 def test_invalid_format_string(client):
     """Test that invalid format strings are rejected."""
-    response = client.get("/%z")  # %z is valid but might not be supported in all environments
+    response = client.get(
+        "/%z"
+    )  # %z is valid but might not be supported in all environments
     assert response.status_code == 400
     assert b"Error" in response.data
 
