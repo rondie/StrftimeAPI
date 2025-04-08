@@ -47,15 +47,22 @@ def test_time_format(client):
 
 def test_invalid_format_string(client):
     """Test that invalid format strings are rejected."""
-    response = client.get(
-        "/%z"
-    )  # %z is valid but might not be supported in all environments
+    # %K is not a valid format directive in strftime
+    response = client.get("/%K")
     assert response.status_code == 400
     assert b"Error" in response.data
 
 
 def test_security_check(client):
     """Test that potentially malicious format strings are rejected."""
-    response = client.get("/%Y;rm -rf /")
-    assert response.status_code == 400
-    assert b"Error: Format string contains invalid characters" in response.data
+    security_test_cases = [
+        "/%Y;rm -rf /",
+        "/%Y&cat /etc/passwd",
+        "/%Y`ls -la`",
+        "/%Y|echo 'hacked'",
+    ]
+    
+    for case in security_test_cases:
+        response = client.get(case)
+        assert response.status_code == 400
+        assert b"Error" in response.data

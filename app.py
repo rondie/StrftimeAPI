@@ -45,9 +45,20 @@ def get_time(format_string):
         # Replace URL encoded characters if present
         format_string = format_string.replace("%25", "%")
 
-        # Basic security check to prevent command injection
-        if re.search(r"[^a-zA-Z0-9\s%\-_.:;,/\\()]", format_string):
+        # Enhanced security check to prevent command injection and invalid formats
+        if re.search(r'[^a-zA-Z0-9\s%\-_.:;,/\\() ]', format_string):
             return "Error: Format string contains invalid characters", 400
+        
+        # Check for potential command injection patterns
+        if ";" in format_string or "`" in format_string or "&" in format_string:
+            return "Error: Format string contains invalid characters", 400
+        
+        # Test for valid format string
+        try:
+            # Try a sample formatting to see if the format string is valid
+            datetime.datetime.now().strftime(format_string)
+        except ValueError:
+            return f"Error: Invalid format string", 400
 
         # Format the current time according to the provided strftime format
         current_time = datetime.datetime.now().strftime(format_string)
