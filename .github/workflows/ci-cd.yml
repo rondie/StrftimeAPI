@@ -1,4 +1,4 @@
-name: TimeFormat CI/CD
+name: StrftimeAPI CI/CD
 
 on:
   push:
@@ -92,7 +92,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.repository_owner }}/timeformat
+          images: ghcr.io/${{ github.repository_owner }}/strftimeapi
           tags: |
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
             type=semver,pattern={{version}},enable=${{ github.event_name == 'release' }}
